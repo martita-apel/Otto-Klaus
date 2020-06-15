@@ -10,10 +10,38 @@
             <span class="text-h4 text--secondary text-center titulo">Registrar Producto</span>
           </v-card-title>
           <v-card-text class="py-0">
-            <v-text-field type="text" v-model="id" placeholder="Código" filled dense></v-text-field>
-            <v-text-field type="text" v-model="name" placeholder="Nombre" filled dense></v-text-field>
-            <v-text-field type="number" v-model="price" placeholder="Precio" filled dense></v-text-field>
-            <v-text-field type="number" v-model="stock" placeholder="Stock" filled dense></v-text-field>
+            <v-text-field
+              placeholder="Código"
+              filled
+              dense
+              type="text"
+              :value="currentToy.data.id"
+              @input="updateId"
+            ></v-text-field>
+            <v-text-field
+              placeholder="Nombre"
+              filled
+              dense
+              type="text"
+              :value="currentToy.data.name"
+              @input="updateName"
+            ></v-text-field>
+            <v-text-field
+              placeholder="Precio"
+              filled
+              dense
+              prefix="$"
+              :value="currentToy.dataprice"
+              @input="updatePrice"
+            ></v-text-field>
+            <v-text-field
+              placeholder="Stock"
+              filled
+              dense
+              suffix="unidades"
+              :value="currentToy.data.stock"
+              @input="updateStock"
+            ></v-text-field>
           </v-card-text>
           <v-card-actions class="añadir">
             <v-spacer></v-spacer>
@@ -34,17 +62,24 @@ import { mapState, mapActions } from "vuex";
 export default {
   name: "Modal",
   data() {
-    return {
-      /* id: "",
-      name: "",
-      price: "",
-      stock: "", */
-    };
+    return {};
+  },
+  computed: {
+    ...mapState(["showForm", "currentToy"])
   },
   methods: {
-    ...mapActions(["updateEdit", "showModal", "addToy"]),
+    ...mapActions([
+      "showModal",
+      "updateId",
+      "updateName",
+      "updatePrice",
+      "updateStock",
+      "addToy",
+      "updateEdit"
+    ]),
     agregarToy() {
       this.addToy();
+      this.showForm = !this.showForm;
     },
     mostrarModal() {
       this.showModal();
@@ -89,24 +124,7 @@ export default {
           console.log(error);
         });
     },
-    borrar(id) {
-      let confirm = confirm("¿Se eliminó?");
-      if (confirm) {
-      axios
-        .delete(
-          `https://us-central1-tddg3-e867b.cloudfunctions.net/products/product/${id}`,
-          { headers: { "Content-type": "application/json" } }
-        )
-        .then(() => {
-          alert("Producto eliminado.");
-          this.$store.dispatch("getProducts");
-        });
-       }
-    }
   },*/
-  },
-  computed: {
-    ...mapState(["showForm"])
   },
   created() {
     this.$store.dispatch("getToys");

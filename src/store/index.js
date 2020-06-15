@@ -34,6 +34,18 @@ export default new Vuex.Store({
     SHOW_MODAL(state) {
       state.showForm = !state.showForm;
     },
+    UPDATE_ID(state, id) {
+      state.currentToy.data.id = id;
+    },
+    UPDATE_NAME(state, name) {
+      state.currentToy.data.name = name;
+    },
+    UPDATE_PRICE(state, price) {
+      state.currentToy.data.price = price;
+    },
+    UPDATE_STOCK(state, stock) {
+      state.currentToy.data.stock = stock;
+    },
     UPDATE_EDIT(state) {
       state.edit = !state.edit;
     },
@@ -52,21 +64,32 @@ export default new Vuex.Store({
     showModal({ commit }) {
       commit("SHOW_MODAL");
     },
-    addToy() {
-      const prod = {
-        id: this.id,
-        name: this.name,
-        price: this.price,
-        stock: this.stock,
-      };
+    updateId({ commit }, id) {
+      commit("UPDATE_ID", id);
+    },
+    updateName({ commit }, name) {
+      commit("UPDATE_NAME", name);
+    },
+    updatePrice({ commit }, price) {
+      commit("UPDATE_PRICE", price);
+    },
+    updateStock({ commit }, stock) {
+      commit("UPDATE_STOCK", stock);
+    },
+    addToy({ state, dispatch }) {
+      const toy = state.currentToy.data;
       axios
         .post(
-          "https://us-central1-otto-klaus-19fcf.cloudfunctions.net/toys/toys",
-          prod,
-          { headers: { "Content-type": "application/json" } }
+          "https://us-central1-otto-klaus-19fcf.cloudfunctions.net/toys/toy",
+          toy,
+          {
+            headers: {
+              "Content-type": "application/json",
+            },
+          }
         )
         .then(() => {
-          this.getToys();
+          dispatch("getToys");
         })
         .catch(function(error) {
           console.log(error);
