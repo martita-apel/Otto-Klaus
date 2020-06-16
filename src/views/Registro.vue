@@ -61,46 +61,27 @@ export default {
     ...mapState(["toys", "edit"])
   },
   methods: {
-    ...mapActions(["getToys", "deleteToy"]),
+    ...mapActions([
+      "getToys",
+      "showModal",
+      "updateEdit",
+      "findProduct",
+      "deleteToy"
+    ]),
     borrarToy(id) {
-      this.deleteToy(id);
-    }
-    /* addNewProduct() {
-      const prod = {
-        name: this.name,
-        price: this.price,
-        stock: this.stock
-      };
-      axios
-        .post(
-          "https://us-central1-otto-klaus-19fcf.cloudfunctions.net/toys/toys",
-          prod,
-          { headers: { "Content-type": "application/json" } }
-        )
-        .then(() => {
-          this.$store.dispatch("getProducts");
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    }, */
-    /*editar(id) {
+      let confirmar = confirm(
+        "¿Estás segura que deseas eliminar este producto?"
+      );
+      if (confirm) {
+        this.deleteToy(id);
+      }
+    },
+    editar(id) {
+      this.showModal();
       this.updateEdit();
       this.findProduct(id);
-    },
-    findProduct(id) {
-      axios
-        .get(
-          `https://us-central1-tddg3-e867b.cloudfunctions.net/products/product/${id}`,
-          { headers: { "Content-type": "application/json" } }
-        )
-        .then(response => {
-          this.name = response.data.name;
-          this.picture = response.data.picture;
-          this.price = response.data.price;
-          this.id = id;
-        });
-    },
+    }
+    /*
     actualizar(id) {
       const prod = {
         name: this.name,

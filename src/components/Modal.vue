@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-dialog :value="showForm" persistent max-width="400px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="orange" dark v-bind="attrs" v-on="on">NUEVO PRODUCTO</v-btn>
+          <v-btn color="orange" dark v-bind="attrs" v-on="on" @click="mostrarModal">NUEVO PRODUCTO</v-btn>
         </template>
         <v-card class="py-6 px-4">
           <v-card-title>
@@ -45,9 +45,9 @@
           </v-card-text>
           <v-card-actions class="añadir">
             <v-spacer></v-spacer>
-            <v-btn class="primary boton-add" text @click="mostrarModal">CERRAR</v-btn>
+            <v-btn class="primary boton-add" text @click="hideModal">CERRAR</v-btn>
             <v-btn class="warning boton-add" text @click="agregarToy">AÑADIR</v-btn>
-            <button class="button is-link" v-if="edit" @click="actualizar(id)">ACTUALIZAR</button>
+            <v-btn class="green boton-add" text v-if="edit" @click="actualizar(id)">ACTUALIZAR</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -65,11 +65,12 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["showForm", "currentToy"])
+    ...mapState(["showForm", "currentToy", "edit"])
   },
   methods: {
     ...mapActions([
       "showModal",
+      "hideModal",
       "updateId",
       "updateName",
       "updatePrice",
@@ -79,52 +80,11 @@ export default {
     ]),
     agregarToy() {
       this.addToy();
-      this.showForm = !this.showForm;
+      this.hideModal();
     },
     mostrarModal() {
       this.showModal();
     }
-
-    /*editar(id) {
-      this.updateEdit();
-      this.findProduct(id);
-    },
-    findProduct(id) {
-      axios
-        .get(
-          `https://us-central1-tddg3-e867b.cloudfunctions.net/products/product/${id}`,
-          { headers: { "Content-type": "application/json" } }
-        )
-        .then(response => {
-          this.name = response.data.name;
-          this.picture = response.data.picture;
-          this.price = response.data.price;
-          this.id = id;
-        });
-    },
-    actualizar(id) {
-      const prod = {
-        name: this.name,
-        picture: this.picture,
-        price: this.price
-      };
-      axios
-        .put(
-          `https://us-central1-tddg3-e867b.cloudfunctions.net/products/product/${id}`,
-          prod,
-          { headers: { "Content-type": "application/json" } }
-        )
-        .then(() => {
-          (this.name = ""),
-            (this.picture = ""),
-            (this.price = ""),
-            this.$store.dispatch("getProducts");
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
-  },*/
   },
   created() {
     this.$store.dispatch("getToys");
@@ -138,6 +98,7 @@ export default {
 }
 .boton-add {
   margin-right: 10px;
+  color: white !important;
 }
 .titulo {
   margin: 0;

@@ -32,7 +32,10 @@ export default new Vuex.Store({
        */
     },
     SHOW_MODAL(state) {
-      state.showForm = !state.showForm;
+      state.showForm = true;
+    },
+    HIDE_MODAL(state) {
+      state.showForm = false;
     },
     UPDATE_ID(state, id) {
       state.currentToy.data.id = id;
@@ -63,6 +66,9 @@ export default new Vuex.Store({
     },
     showModal({ commit }) {
       commit("SHOW_MODAL");
+    },
+    hideModal({ commit }) {
+      commit("HIDE_MODAL");
     },
     updateId({ commit }, id) {
       commit("UPDATE_ID", id);
@@ -95,7 +101,23 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    deleteToy({ commit, dispatch }, id) {
+    updateEdit({ commit }) {
+      commit("UPDATE_EDIT");
+    },
+    findProduct({ state }, id) {
+      axios
+        .get(
+          `https://us-central1-tddg3-e867b.cloudfunctions.net/products/product/${id}`,
+          { headers: { "Content-type": "application/json" } }
+        )
+        .then((response) => {
+          state.currentToy.data.id = response.data.id;
+          state.currentToy.data.name = response.data.name;
+          state.currentToy.data.price = response.data.price;
+          state.currentToy.data.stock = response.data.stock;
+        });
+    },
+    deleteToy({ dispatch }, id) {
       /* let confirm = confirm("¿Se eliminó?");
       if (confirm) { */
       axios
@@ -104,7 +126,6 @@ export default new Vuex.Store({
           { headers: { "Content-type": "application/json" } }
         )
         .then(() => {
-          alert("Producto eliminado.");
           dispatch("getToys");
         });
       /* } */
