@@ -4,19 +4,21 @@ import axios from "axios";
 
 Vue.use(Vuex);
 
-const baseToy = {
-  id: null,
-  data: {
-    id: "",
-    name: "",
-    price: 0,
-    stock: 0,
-  },
-};
+function baseToy() {
+  return {
+    id: null,
+    data: {
+      id: "",
+      name: "",
+      price: 0,
+      stock: 0,
+    },
+  };
+}
 
 export default new Vuex.Store({
   state: {
-    currentToy: baseToy,
+    currentToy: baseToy(),
     toys: [],
     showForm: false,
     loading: false,
@@ -31,8 +33,9 @@ export default new Vuex.Store({
     },
     SET_EMPTY_TOY(state) {
       state.currentToy.id = null;
-      Object.keys(baseToy.data).forEach((key) => {
-        state.currentToy.data[key] = baseToy.data[key];
+      const base = baseToy();
+      Object.keys(base.data).forEach((key) => {
+        state.currentToy.data[key] = base.data[key];
       });
     },
     GET_TOYS(state, data) {
