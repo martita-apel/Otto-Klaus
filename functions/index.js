@@ -18,7 +18,7 @@ router.get("/toy/:id", async (req, res) => {
     .then((doc) => {
       if (doc.exists) {
         console.log("Document data:", doc.data());
-        return doc.data();
+        return { id: doc.id, data: doc.data() };
       } else {
         console.log("No such document!");
         return {};

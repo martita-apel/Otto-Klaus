@@ -40,6 +40,9 @@
 
     <v-main class="modal">
       <Modal />
+      <v-overlay :value="loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
     </v-main>
   </v-layout>
 </template>
@@ -58,7 +61,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["toys", "edit"])
+    ...mapState(["toys", "edit", "loading"])
   },
   methods: {
     ...mapActions([
@@ -68,43 +71,21 @@ export default {
       "findProduct",
       "deleteToy"
     ]),
+
+    editar(id) {
+      this.showModal();
+      this.findProduct(id);
+      /*       this.updateEdit();
+       */
+    },
     borrarToy(id) {
       let confirmar = confirm(
         "¿Estás segura que deseas eliminar este producto?"
       );
-      if (confirm) {
+      if (confirmar) {
         this.deleteToy(id);
       }
-    },
-    editar(id) {
-      this.showModal();
-      this.updateEdit();
-      this.findProduct(id);
     }
-    /*
-    actualizar(id) {
-      const prod = {
-        name: this.name,
-        picture: this.picture,
-        price: this.price
-      };
-      axios
-        .put(
-          `https://us-central1-tddg3-e867b.cloudfunctions.net/products/product/${id}`,
-          prod,
-          { headers: { "Content-type": "application/json" } }
-        )
-        .then(() => {
-          (this.name = ""),
-            (this.picture = ""),
-            (this.price = ""),
-            this.$store.dispatch("getProducts");
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
-  },*/
   },
   created() {
     this.$store.dispatch("getToys");

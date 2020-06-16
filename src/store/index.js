@@ -23,9 +23,18 @@ export default new Vuex.Store({
     edit: false,
   },
   mutations: {
-    /* LOADING_PRODUCTS(state) {
-      state.loading = !state.loading;
-    }, */
+    LOADING_TRUE(state) {
+      state.loading = true;
+    },
+    LOADING_FALSE(state) {
+      state.loading = false;
+    },
+    SET_EMPTY_TOY(state) {
+      state.currentToy.id = null;
+      Object.keys(baseToy.data).forEach((key) => {
+        state.currentToy.data[key] = baseToy.data[key];
+      });
+    },
     GET_TOYS(state, data) {
       state.toys = data;
       /*       state.loading = false;
@@ -49,20 +58,33 @@ export default new Vuex.Store({
     UPDATE_STOCK(state, stock) {
       state.currentToy.data.stock = stock;
     },
-    UPDATE_EDIT(state) {
+    /* UPDATE_EDIT(state) {
       state.edit = !state.edit;
+    }, */
+    SET_CURRENT_TOY(state, toy) {
+      state.currentToy = toy;
     },
   },
   actions: {
     getToys({ commit }) {
-      axios
-        .get(
-          "https://us-central1-otto-klaus-19fcf.cloudfunctions.net/toys/toys"
-        )
-        .then((response) => {
-          console.log(response.data);
-          commit("GET_TOYS", response.data);
-        });
+      commit("LOADING_TRUE"),
+        axios
+          .get(
+            "https://us-central1-otto-klaus-19fcf.cloudfunctions.net/toys/toys"
+          )
+          .then((response) => {
+            console.log(response.data);
+            /*  (state.currentToy.id = null),
+              (state.currentToy.data.id = ""),
+              (state.currentToy.data.name = ""),
+              (state.currentToy.data.price = 0),
+              (state.currentToy.data.stock = 0); */
+            commit("GET_TOYS", response.data);
+            commit("SET_EMPTY_TOY");
+          })
+          .finally(() => {
+            commit("LOADING_FALSE");
+          });
     },
     showModal({ commit }) {
       commit("SHOW_MODAL");
@@ -88,15 +110,12 @@ export default new Vuex.Store({
         .post(
           "https://us-central1-otto-klaus-19fcf.cloudfunctions.net/toys/toy",
           toy,
-          {
-            headers: {
-              "Content-type": "application/json",
-            },
-          }
+          { headers: { "Content-type": "application/json" } }
         )
         .then(() => {
           dispatch("getToys");
         })
+
         .catch(function(error) {
           console.log(error);
         });
@@ -104,17 +123,27 @@ export default new Vuex.Store({
     updateEdit({ commit }) {
       commit("UPDATE_EDIT");
     },
-    findProduct({ state }, id) {
+    findProduct({ commit }, id) {
       axios
         .get(
-          `https://us-central1-tddg3-e867b.cloudfunctions.net/products/product/${id}`,
-          { headers: { "Content-type": "application/json" } }
+          `https://us-central1-otto-klaus-19fcf.cloudfunctions.net/toys/toy/${id}`
         )
         .then((response) => {
-          state.currentToy.data.id = response.data.id;
-          state.currentToy.data.name = response.data.name;
-          state.currentToy.data.price = response.data.price;
-          state.currentToy.data.stock = response.data.stock;
+          commit("SET_CURRENT_TOY", response.data);
+        });
+    },
+    updateToy({ state, dispatch }, id) {
+      const toy = state.currentToy.data;
+      axios
+        .put(
+          `https://us-central1-otto-klaus-19fcf.cloudfunctions.net/toys/toy/${id}`,
+          toy
+        )
+        .then(() => {
+          dispatch("getToys");
+        })
+        .catch(function(error) {
+          console.log(error);
         });
     },
     deleteToy({ dispatch }, id) {
