@@ -2,7 +2,9 @@
   <v-layout column justify-center align-center class="registro">
     <div ref="form" :model="usuario" class="my-15">
       <v-card class="white py-8 px-10">
-        <h2 class="text-h3 text--secondary text-center titulo">Iniciar Sesión</h2>
+        <h2 class="text-h3 text--secondary text-center titulo">
+          Iniciar Sesión
+        </h2>
         <br />
         <v-text-field
           v-model="usuario.email"
@@ -43,8 +45,8 @@ export default {
       showPassword: false,
       usuario: {
         email: "",
-        password: ""
-      }
+        password: "",
+      },
     };
   },
   methods: {
@@ -53,18 +55,18 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.usuario.email, this.usuario.password)
-        .then(user => {
+        .then((user) => {
           console.log(user);
-          let userValid = this.usuario.email;
-          this.$store.dispatch("userLogin", userValid);
+          /* let userValid = this.usuario.email;
+          this.$store.dispatch("userLogin", userValid); */
           this.$router.push("/registro");
           alert("Te has registrado con éxito!");
         })
         .catch(() => {
           console.log("Usuario no autenticado");
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

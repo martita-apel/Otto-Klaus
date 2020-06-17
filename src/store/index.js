@@ -38,6 +38,13 @@ export default new Vuex.Store({
         state.currentToy.data[key] = base.data[key];
       });
     },
+    LISTA_ORDENADA(state) {
+      state.toys.map((toy) => {
+        toy.sort((a, b) => {
+          return a.data.id - b.data.id;
+        });
+      });
+    },
     GET_TOYS(state, data) {
       state.toys = data;
       /*       state.loading = false;
@@ -77,12 +84,14 @@ export default new Vuex.Store({
           )
           .then((response) => {
             console.log(response.data);
+            const data = response.data;
             /*  (state.currentToy.id = null),
               (state.currentToy.data.id = ""),
               (state.currentToy.data.name = ""),
               (state.currentToy.data.price = 0),
               (state.currentToy.data.stock = 0); */
-            commit("GET_TOYS", response.data);
+            commit("LISTA_ORDENADA");
+            commit("GET_TOYS", data);
             commit("SET_EMPTY_TOY");
           })
           .finally(() => {

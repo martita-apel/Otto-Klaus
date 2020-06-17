@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {

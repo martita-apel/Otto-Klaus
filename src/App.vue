@@ -41,7 +41,12 @@
     <v-footer dark padless>
       <v-card flat tile class="blue darken-4 white--text text-center">
         <v-card-text class="pb-0">
-          <v-btn v-for="icon in icons" :key="icon" class="mx-4 white--text" icon>
+          <v-btn
+            v-for="icon in icons"
+            :key="icon"
+            class="mx-4 white--text"
+            icon
+          >
             <v-icon size="24px">{{ icon }}</v-icon>
           </v-btn>
         </v-card-text>
@@ -69,27 +74,9 @@
 export default {
   data() {
     return {
-      /*   clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: "mdi-apps",
-          title: "Iniciar Sesión",
-          to: "/login",
-        },
-        {
-          icon: "mdi-pinwheel",
-          title: "Registro",
-          to: "/registro",
-        },
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false, */
-      icons: ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"]
+      icons: ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"],
     };
-  }
+  },
 };
 </script>
 <style>

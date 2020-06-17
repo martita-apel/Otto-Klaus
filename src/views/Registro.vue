@@ -18,7 +18,12 @@
             <td>{{ toy.data.price }}</td>
             <td>{{ toy.data.stock }}</td>
             <td>
-              <v-btn small outlined color="green darken-1" @click="editar(toy.id)">
+              <v-btn
+                small
+                outlined
+                color="green darken-1"
+                @click="editar(toy.id)"
+              >
                 <span class="icon is-small">
                   <i class="fas fa-check"></i>
                 </span>
@@ -26,7 +31,12 @@
               </v-btn>
             </td>
             <td>
-              <v-btn small outlined color="red darken-1" @click="borrarToy(toy.id)">
+              <v-btn
+                small
+                outlined
+                color="red darken-1"
+                @click="borrarToy(toy.id)"
+              >
                 <span class="icon is-small">
                   <i class="fas fa-times"></i>
                 </span>
@@ -44,24 +54,26 @@
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
     </v-main>
+
+    <v-btn class="cerrar" @click="logout">Cerrar Sesión</v-btn>
   </v-layout>
 </template>
 
 <script>
-import axios from "axios";
-import { mapState, mapActions } from "vuex";
 import Modal from "../components/Modal.vue";
+import { mapState, mapActions } from "vuex";
+import firebase from "firebase";
 
 export default {
   name: "Registro",
   components: {
-    Modal
+    Modal,
   },
   data() {
     return {};
   },
   computed: {
-    ...mapState(["toys", "edit", "loading"])
+    ...mapState(["toys", "edit", "loading"]),
   },
   methods: {
     ...mapActions([
@@ -69,7 +81,7 @@ export default {
       "showModal",
       "updateEdit",
       "findProduct",
-      "deleteToy"
+      "deleteToy",
     ]),
 
     editar(id) {
@@ -85,11 +97,19 @@ export default {
       if (confirmar) {
         this.deleteToy(id);
       }
-    }
+    },
+    logout() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.push("/login");
+        });
+    },
   },
   created() {
     this.$store.dispatch("getToys");
-  }
+  },
 };
 </script>
 
@@ -107,5 +127,8 @@ export default {
 }
 .modal {
   margin: 5px 0 40px 0;
+}
+.cerrar {
+  margin-bottom: 40px !important;
 }
 </style>
