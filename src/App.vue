@@ -13,8 +13,8 @@
 
           <div style="flex-basis: 20%">
             <v-toolbar color="blue darken-4">
-              <v-btn text dark rounded to="/">Iniciar Sesión</v-btn>
-              <v-btn text dark rounded to="/registro">Registro</v-btn>
+              <router-link class="link" to="/">INICIAR SESIÓN</router-link>
+              <router-link class="link" to="/registro">REGISTRO</router-link>
 
               <v-spacer></v-spacer>
               <v-btn icon>
@@ -82,6 +82,9 @@ export default {
 <style>
 .link {
   color: white !important;
+  text-decoration: none;
+  padding-right: 20px;
+  letter-spacing: 1px;
 }
 .logo {
   width: 200px;
