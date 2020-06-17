@@ -13,8 +13,8 @@
 
           <div style="flex-basis: 20%">
             <v-toolbar color="blue darken-4">
-              <v-tab class="link" to="/">Iniciar Sesión</v-tab>
-              <v-tab class="link" to="/registro">Registro</v-tab>
+              <v-btn text dark rounded to="/">Iniciar Sesión</v-btn>
+              <v-btn text dark rounded to="/registro">Registro</v-btn>
 
               <v-spacer></v-spacer>
               <v-btn icon>
